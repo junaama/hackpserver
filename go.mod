@@ -1,4 +1,5 @@
 module github.com/junaama/hackpserver
+
 // +heroku goVersion go1.16
 go 1.16
 
@@ -8,6 +9,12 @@ require (
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/heroku/x v0.0.28
 	github.com/joho/godotenv v1.3.0
+	github.com/kr/fs v0.1.0 // indirect
+	github.com/kr/pretty v0.2.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/tools/godep v0.0.0-20180126220526-ce0bfadeb516 // indirect
 	go.mongodb.org/mongo-driver v1.4.5
-	golang.org/x/crypto v0.0.0-20190829043050-9756ffdc2472
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
+	golang.org/x/tools v0.1.0 // indirect
 )
