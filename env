@@ -1,0 +1,3 @@
+MONGODB_URL=mongodb+srv://dbUser:dbUserPassword@cluster0.om7ca.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+PORT=8000
+SECRET_KEY=abc123
