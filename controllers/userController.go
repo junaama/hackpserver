@@ -77,16 +77,16 @@ func SignUp() gin.HandlerFunc {
         password := HashPassword(*user.Password)
         user.Password = &password
 
-        count, err = userCollection.CountDocuments(ctx, bson.M{"phone": user.Phone})
-        defer cancel()
-        if err != nil {
-            log.Panic(err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while checking for the phone number"})
-            return
-        }
+        //count, err = userCollection.CountDocuments(ctx, bson.M{"phone": user.Phone})
+        // defer cancel()
+        // if err != nil {
+        //     log.Panic(err)
+        //     c.JSON(http.StatusInternalServerError, gin.H{"error": "error occured while checking for the phone number"})
+        //     return
+        // }
 
         if count > 0 {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "this email or phone number already exists"})
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "this email already exists"})
             return
         }
 
@@ -94,7 +94,7 @@ func SignUp() gin.HandlerFunc {
         user.Updated_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
         user.ID = primitive.NewObjectID()
         user.User_id = user.ID.Hex()
-        token, refreshToken, _ := helper.GenerateAllTokens(*user.Email, *user.First_name, *user.Last_name, user.User_id)
+        token, refreshToken, _ := helper.GenerateAllTokens(*user.Email, *user.First_name, user.User_id)
         user.Token = &token
         user.Refresh_token = &refreshToken
 
@@ -111,7 +111,7 @@ func SignUp() gin.HandlerFunc {
     }
 }
 
-//Login is the api used to tget a single user
+//Login is the api used to get a single user
 func Login() gin.HandlerFunc {
     return func(c *gin.Context) {
         var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -126,7 +126,7 @@ func Login() gin.HandlerFunc {
         err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
         defer cancel()
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "login or passowrd is incorrect"})
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "login or password is incorrect"})
             return
         }
 
@@ -137,7 +137,7 @@ func Login() gin.HandlerFunc {
             return
         }
 
-        token, refreshToken, _ := helper.GenerateAllTokens(*foundUser.Email, *foundUser.First_name, *foundUser.Last_name, foundUser.User_id)
+        token, refreshToken, _ := helper.GenerateAllTokens(*foundUser.Email, *foundUser.First_name, foundUser.User_id)
 
         helper.UpdateAllTokens(token, refreshToken, foundUser.User_id)
 
